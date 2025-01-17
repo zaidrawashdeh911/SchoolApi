@@ -18,12 +18,5 @@ public class Human
     public string Email{set;get;}= "";
     [MaxLength(200)]
     public string Address{set;get;}= "";
-
-
-    // public virtual void Print()
-    // {
-    //     Console.WriteLine("I am a human");
-    // }
-    
 }
 
