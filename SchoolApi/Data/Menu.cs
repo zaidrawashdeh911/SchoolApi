@@ -9,8 +9,10 @@ public class Menu: IMenu
         Console.WriteLine("Pancakes");
         Console.WriteLine("Croissants");
         Console.WriteLine("Cereals or Oatmeal");
+
+        Console.WriteLine(4 + "cabin");
     }
-    
+
     public void LunchMenu()
     {
         Console.WriteLine("\nCafeteria Lunch Menu: ");

@@ -1,26 +1,28 @@
-﻿using SchoolApi.Models.Users;
+﻿using System.ComponentModel.DataAnnotations;
+using SchoolApi.Models.Users;
 
 namespace SchoolApi.Models;
 public class Course
 {
-    private static int CourseId{get;set;}
-    public string Name{get;set;}
-    private Teacher Teachers{get;set;}
-    private Student[] Students{get;set;}
+    public int CourseId{get;init;}
+    [MaxLength(50)]
+    public string Name { get; init; } = "";
+    public Teacher? Teachers{get; set;}
+    public List<Student>? Students{get;set;}
 
-    public Course()
-    {
-        CourseId++;
-        this.Name = "testCourse";
-        this.Teachers = new Teacher();
-        this.Students = new Student[30];
-    }
-    public Course(Teacher teachers, Student[] students, string name, string id)
-    {
-        CourseId++;
-        this.Name = name;
-        this.Teachers = teachers;
-        this.Students = students;
-    }
+    // public Course()
+    // {
+    //     CourseId++;
+    //     this.Name = "testCourse";
+    //     this.Teachers = new Teacher();
+    //     this.Students = new Student[30];
+    // }
+    // public Course(Teacher teachers, Student[] students, string name, string id)
+    // {
+    //     CourseId++;
+    //     this.Name = name;
+    //     this.Teachers = teachers;
+    //     this.Students = students;
+    // }
     
 }
