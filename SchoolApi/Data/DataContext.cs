@@ -25,7 +25,6 @@ public class DataContext(IConfiguration config) : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        // how to create a migration using .net core and ef core  and pstgrs
         modelBuilder.Entity<Human>()
             .ToTable("Humans")
             .HasKey(human => human.HumanId);
@@ -47,14 +46,6 @@ public class DataContext(IConfiguration config) : DbContext
             .Property(student => student.StudentId)
             .ValueGeneratedOnAdd();
         
-        // modelBuilder.Entity<InternationalStudent>()
-        //     .ToTable("InternationalStudents")
-        //     .HasKey(iStudent => iStudent.InternationalStudentId);
-        //
-        // modelBuilder.Entity<NationalStudent>()
-        //     .ToTable("NationalStudents")
-        //     .HasKey(nStudent => nStudent.NationalStudentId);
-        
         modelBuilder.Entity<Course>()
             .ToTable("Courses")
             .HasKey(course => course.CourseId);
@@ -65,6 +56,23 @@ public class DataContext(IConfiguration config) : DbContext
             .HasOne(course => course.Teacher)
             .WithOne(teacher => teacher.Course)
             .HasForeignKey<Course>(course => course.TeacherId);
+        
+        /*
+            this is another way to configure the entity model (model building)
+            modelBuilder.Entity<Course>(entity =>
+            {
+                entity.ToTable("Courses");
+
+                entity.HasKey(course => course.CourseId);
+
+                entity.Property(course => course.CourseId)
+                      .ValueGeneratedOnAdd();
+
+                entity.HasOne(course => course.Teacher)
+                      .WithOne(teacher => teacher.Course)
+                      .HasForeignKey<Course>(course => course.TeacherId);
+            });
+         */
         
         modelBuilder.Entity<CourseStudentRelation>()
             .HasKey(studentCourse => new { studentCourse.StudentId, studentCourse.CourseId });
