@@ -10,5 +10,5 @@ public class Course
     
     public int TeacherId{get;set;}
     public Teacher? Teacher{get; set;}
-    public ICollection<CourseStudentRelation>? CourseStudentRelations{get; set;}
+    // public ICollection<CourseStudentRelation>? CourseStudentRelations{get; set;}
 }

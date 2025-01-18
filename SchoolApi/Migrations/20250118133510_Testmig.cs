@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace SchoolApi.Migrations
 {
     /// <inheritdoc />
-    public partial class DbCreation : Migration
+    public partial class Testmig : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -28,21 +28,6 @@ namespace SchoolApi.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Humans", x => x.HumanId);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Orders",
-                columns: table => new
-                {
-                    OrderId = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    StudentId = table.Column<int>(type: "integer", nullable: false),
-                    BreakfastOrder = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
-                    LunchOrder = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Orders", x => x.OrderId);
                 });
 
             migrationBuilder.CreateTable(
@@ -91,56 +76,21 @@ namespace SchoolApi.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "CourseStudentRelations",
-                columns: table => new
-                {
-                    StudentId = table.Column<int>(type: "integer", nullable: false),
-                    CourseId = table.Column<int>(type: "integer", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_CourseStudentRelations", x => new { x.StudentId, x.CourseId });
-                    table.ForeignKey(
-                        name: "FK_CourseStudentRelations_Courses_CourseId",
-                        column: x => x.CourseId,
-                        principalTable: "Courses",
-                        principalColumn: "CourseId",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_CourseStudentRelations_Students_StudentId",
-                        column: x => x.StudentId,
-                        principalTable: "Students",
-                        principalColumn: "StudentId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
             migrationBuilder.CreateIndex(
                 name: "IX_Courses_TeacherId",
                 table: "Courses",
                 column: "TeacherId",
                 unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_CourseStudentRelations_CourseId",
-                table: "CourseStudentRelations",
-                column: "CourseId");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "CourseStudentRelations");
+                name: "Courses");
 
             migrationBuilder.DropTable(
                 name: "Humans");
-
-            migrationBuilder.DropTable(
-                name: "Orders");
-
-            migrationBuilder.DropTable(
-                name: "Courses");
 
             migrationBuilder.DropTable(
                 name: "Students");

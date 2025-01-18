@@ -12,8 +12,8 @@ using SchoolApi.Data;
 namespace SchoolApi.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20250117231741_DbCreation")]
-    partial class DbCreation
+    [Migration("20250118133510_Testmig")]
+    partial class Testmig
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -47,47 +47,6 @@ namespace SchoolApi.Migrations
                         .IsUnique();
 
                     b.ToTable("Courses", (string)null);
-                });
-
-            modelBuilder.Entity("SchoolApi.Models.CourseStudentRelation", b =>
-                {
-                    b.Property<int>("StudentId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("CourseId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("StudentId", "CourseId");
-
-                    b.HasIndex("CourseId");
-
-                    b.ToTable("CourseStudentRelations");
-                });
-
-            modelBuilder.Entity("SchoolApi.Models.Meals.Order", b =>
-                {
-                    b.Property<int>("OrderId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("OrderId"));
-
-                    b.Property<string>("BreakfastOrder")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("character varying(200)");
-
-                    b.Property<string>("LunchOrder")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("character varying(200)");
-
-                    b.Property<int>("StudentId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("OrderId");
-
-                    b.ToTable("Orders");
                 });
 
             modelBuilder.Entity("SchoolApi.Models.Users.Human", b =>
@@ -172,35 +131,6 @@ namespace SchoolApi.Migrations
                         .IsRequired();
 
                     b.Navigation("Teacher");
-                });
-
-            modelBuilder.Entity("SchoolApi.Models.CourseStudentRelation", b =>
-                {
-                    b.HasOne("SchoolApi.Models.Course", "Course")
-                        .WithMany("CourseStudentRelations")
-                        .HasForeignKey("CourseId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("SchoolApi.Models.Users.Student", "Student")
-                        .WithMany("CourseStudentRelations")
-                        .HasForeignKey("StudentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Course");
-
-                    b.Navigation("Student");
-                });
-
-            modelBuilder.Entity("SchoolApi.Models.Course", b =>
-                {
-                    b.Navigation("CourseStudentRelations");
-                });
-
-            modelBuilder.Entity("SchoolApi.Models.Users.Student", b =>
-                {
-                    b.Navigation("CourseStudentRelations");
                 });
 
             modelBuilder.Entity("SchoolApi.Models.Users.Teacher", b =>
