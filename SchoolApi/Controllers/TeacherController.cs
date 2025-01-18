@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using SchoolApi.Data;
 using SchoolApi.Dtos;
+using SchoolApi.Models;
 using SchoolApi.Models.Users;
 
 namespace SchoolApi.Controllers;
@@ -29,7 +30,12 @@ public class TeacherController(IConfiguration config): ControllerBase
 
         if (teacher != null)
         {
-            return teacher;
+            var returnTeacher = new Teacher()
+            {
+                TeacherId = teacher.TeacherId,
+                TeachLevel = teacher.TeachLevel
+            };
+            return returnTeacher;
         }
         throw new Exception("No teacher found");
     }
@@ -42,7 +48,8 @@ public class TeacherController(IConfiguration config): ControllerBase
             Teacher teacherDb = new Teacher();
 
             teacherDb.TeachLevel = teacher.TeacherLevel;
-            teacherDb.Course = teacher.Course;
+            var course = _entityFramework.Courses.FirstOrDefault(c => c.CourseId == teacher.CourseId);
+            teacherDb.Course= course;
             _entityFramework.Teachers.Add(teacherDb);
 
             if (_entityFramework.SaveChanges() > 0)
@@ -52,6 +59,24 @@ public class TeacherController(IConfiguration config): ControllerBase
             throw new Exception("Failed to add teacher");
         }
         throw new Exception("Cannot add null teacher");
+    }
+
+    [HttpPut("UpdateTeacher")]
+    public IActionResult UpdateTeacher(TeacherToEditDto teacher)
+    {
+        Teacher? teacherDb = _entityFramework.Teachers
+            .Where(t => t.TeacherId == teacher.TeacherId)
+            .FirstOrDefault<Teacher>();
+        if (teacherDb != null)
+        {
+            teacherDb.TeachLevel = teacher.TeachLevel;
+            if (_entityFramework.SaveChanges() > 0)
+            {
+                return Ok();
+            }
+            throw new Exception("Failed to update teacher");
+        }
+        throw new Exception("Failed to get teacher");
     }
     
     [HttpDelete("DeleteTeacher/{teacherId}")]

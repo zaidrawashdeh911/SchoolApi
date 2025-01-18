@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace SchoolApi.Migrations
 {
     /// <inheritdoc />
-    public partial class Testmig : Migration
+    public partial class TableCreation : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

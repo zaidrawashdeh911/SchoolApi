@@ -12,8 +12,8 @@ using SchoolApi.Data;
 namespace SchoolApi.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20250118133510_Testmig")]
-    partial class Testmig
+    [Migration("20250118164114_TableCreation")]
+    partial class TableCreation
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

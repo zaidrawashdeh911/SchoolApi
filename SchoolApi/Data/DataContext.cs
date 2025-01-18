@@ -44,6 +44,10 @@ public class DataContext(IConfiguration config) : DbContext
         modelBuilder.Entity<Teacher>()
             .Property(teacher => teacher.TeacherId)
             .ValueGeneratedOnAdd();
+        modelBuilder.Entity<Teacher>()
+            .HasOne(teacher=> teacher.Course)
+            .WithOne(course => course.Teacher)
+            .HasForeignKey<Course>(course => course.TeacherId);
         
         modelBuilder.Entity<Student>()
             .ToTable("Students")
