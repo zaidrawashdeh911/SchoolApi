@@ -11,8 +11,8 @@ public class DataContext(IConfiguration config) : DbContext
     public DbSet<Teacher> Teachers { get; set; }
     public DbSet<Student> Students { get; set; }
     public DbSet<Course> Courses { get; set; }
-    public DbSet<CourseStudentRelation> CourseStudentRelations { get; set; }
-    public DbSet<Order> Orders { get; set; }
+    //public DbSet<CourseStudentRelation> CourseStudentRelations { get; set; }
+   // public DbSet<Order> Orders { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -25,6 +25,12 @@ public class DataContext(IConfiguration config) : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        // to create a migration using terminal, use these commands:
+        // dotnet clean
+        // dotnet build
+        // dotnet ef migrations add DbCreation
+        // dotnet ef database update
+
         modelBuilder.Entity<Human>()
             .ToTable("Humans")
             .HasKey(human => human.HumanId);
@@ -74,18 +80,18 @@ public class DataContext(IConfiguration config) : DbContext
             });
          */
         
-        modelBuilder.Entity<CourseStudentRelation>()
-            .HasKey(studentCourse => new { studentCourse.StudentId, studentCourse.CourseId });
-
-        modelBuilder.Entity<CourseStudentRelation>()
-            .HasOne(studentCourse => studentCourse.Student)
-            .WithMany(student => student.CourseStudentRelations)
-            .HasForeignKey(studentCourse => studentCourse.StudentId);
-
-        modelBuilder.Entity<CourseStudentRelation>()
-            .HasOne(studentCourse => studentCourse.Course)
-            .WithMany(course => course.CourseStudentRelations)
-            .HasForeignKey(studentCourse => studentCourse.CourseId);
+        // modelBuilder.Entity<CourseStudentRelation>()
+        //     .HasKey(studentCourse => new { studentCourse.StudentId, studentCourse.CourseId });
+        //
+        // modelBuilder.Entity<CourseStudentRelation>()
+        //     .HasOne(studentCourse => studentCourse.Student)
+        //     .WithMany(student => student.CourseStudentRelations)
+        //     .HasForeignKey(studentCourse => studentCourse.StudentId);
+        //
+        // modelBuilder.Entity<CourseStudentRelation>()
+        //     .HasOne(studentCourse => studentCourse.Course)
+        //     .WithMany(course => course.CourseStudentRelations)
+        //     .HasForeignKey(studentCourse => studentCourse.CourseId);
 
         // modelBuilder.Entity<Order>()
         //     .ToTable("Orders")

@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using SchoolApi.Data;
+using SchoolApi.Dtos;
 using SchoolApi.Models.Users;
 
 namespace SchoolApi.Controllers;
@@ -33,9 +34,42 @@ public class TeacherController(IConfiguration config): ControllerBase
         throw new Exception("No teacher found");
     }
 
-    // [HttpPost("AddTeacher")]
-    // public IActionResult AddTeacher(Teacher teacher)
-    // {
-    //     return Ok();
-    // }
+    [HttpPost("AddTeacher")]
+    public IActionResult AddTeacher(TeacherToAddDto teacher)
+    {
+        if (teacher != null)
+        {
+            Teacher teacherDb = new Teacher();
+
+            teacherDb.TeachLevel = teacher.TeacherLevel;
+            teacherDb.Course = teacher.Course;
+            _entityFramework.Teachers.Add(teacherDb);
+
+            if (_entityFramework.SaveChanges() > 0)
+            {
+                return Ok();
+            }
+            throw new Exception("Failed to add teacher");
+        }
+        throw new Exception("Cannot add null teacher");
+    }
+    
+    [HttpDelete("DeleteTeacher/{teacherId}")]
+    public IActionResult DeleteTeacher(int teacherId)
+    {
+        Teacher? teacherDb = _entityFramework.Teachers
+            .Where(teacher => teacher.TeacherId == teacherId)
+            .FirstOrDefault<Teacher>();
+
+        if (teacherDb != null)
+        {
+            _entityFramework.Teachers.Remove(teacherDb);
+            if (_entityFramework.SaveChanges() > 0)
+            {
+                return Ok();
+            }
+            throw new Exception("Failed to delete teacher");
+        }
+        throw new Exception("Cannot delete null teacher");
+    }
 }
