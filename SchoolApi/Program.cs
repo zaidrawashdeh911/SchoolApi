@@ -1,3 +1,5 @@
+using SchoolApi.Repositories;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
@@ -23,6 +25,7 @@ builder.Services.AddCors((options) =>
             .AllowCredentials();
     });
 });
+builder.Services.AddScoped<ITeacherRepository, TeacherRepository>();
 
 var app = builder.Build();
 

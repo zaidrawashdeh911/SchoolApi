@@ -1,8 +1,12 @@
+using AutoMapper;
+using FluentValidation.Results;
 using Microsoft.AspNetCore.Mvc;
 using SchoolApi.Data;
-using SchoolApi.Dtos;
+using SchoolApi.Dtos.TeacherDtos;
 using SchoolApi.Models;
 using SchoolApi.Models.Users;
+using SchoolApi.Repositories;
+using SchoolApi.Validators.TeacherValidators;
 
 namespace SchoolApi.Controllers;
 
@@ -10,67 +14,96 @@ namespace SchoolApi.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class TeacherController(IConfiguration config): ControllerBase
+public class TeacherController: ControllerBase
 {
-    private readonly DataContext _entityFramework= new(config);
-    
-    [HttpGet("GetTeachers")]
-    public IEnumerable<Teacher> GetTeachers()
+    private readonly DataContext _context;
+    private readonly IMapper _mapper;
+    private readonly ITeacherRepository _teacherRepository;
+
+    public TeacherController(IConfiguration config, ITeacherRepository teacherRepository)
     {
-        IEnumerable<Teacher> teachers = _entityFramework.Teachers.ToList<Teacher>();
-        return teachers;
+        _teacherRepository = teacherRepository;
+        _context = new DataContext(config);
+        _mapper = new Mapper(new MapperConfiguration(configure =>
+        {
+            configure.CreateMap<Teacher,TeacherToReturnDto>();
+            configure.CreateMap<TeacherToAddDto,Teacher>();
+        }));
+    }
+    
+    [HttpGet("GetAllTeachers")]
+    public IEnumerable<TeacherToReturnDto> GetTeachers()
+    {
+        IEnumerable<TeacherToReturnDto> returnTeachers = _mapper.Map<IEnumerable<TeacherToReturnDto>>(_teacherRepository.GetTeachers());
+        
+        return returnTeachers;
     }
 
     [HttpGet("GetSingleTeacher/{teacherId}")]
-    public Teacher GetSingleTeacher(int teacherId)
+    public TeacherToReturnDto GetSingleTeacher(int teacherId)
     {
-        Teacher? teacher = _entityFramework.Teachers
-            .Where(t => t.TeacherId == teacherId)
-            .FirstOrDefault<Teacher>();
-
-        if (teacher != null)
-        {
-            var returnTeacher = new Teacher()
-            {
-                TeacherId = teacher.TeacherId,
-                TeachLevel = teacher.TeachLevel
-            };
-            return returnTeacher;
-        }
-        throw new Exception("No teacher found");
+        TeacherToReturnDto returnTeacher= _mapper.Map<TeacherToReturnDto>(_teacherRepository.GetSingleTeacher(teacherId));
+        
+        return returnTeacher;
     }
 
     [HttpPost("AddTeacher")]
     public IActionResult AddTeacher(TeacherToAddDto teacher)
     {
-        if (teacher != null)
+        TeacherToAddValidator toAddValidator = new TeacherToAddValidator();
+        ValidationResult result = toAddValidator.Validate(teacher);
+        if (!result.IsValid)
         {
-            Teacher teacherDb = new Teacher();
-
-            teacherDb.TeachLevel = teacher.TeacherLevel;
-            var course = _entityFramework.Courses.FirstOrDefault(c => c.CourseId == teacher.CourseId);
-            teacherDb.Course= course;
-            _entityFramework.Teachers.Add(teacherDb);
-
-            if (_entityFramework.SaveChanges() > 0)
+            foreach(var failure in result.Errors)
             {
-                return Ok();
+                Console.WriteLine("Property " + failure.PropertyName + " failed validation. Error was: " + failure.ErrorMessage);
             }
-            throw new Exception("Failed to add teacher");
+            return BadRequest();
         }
-        throw new Exception("Cannot add null teacher");
+        
+        Teacher teacherDb = new Teacher();
+        
+        Course? course = _context.Courses.FirstOrDefault(c => c.Id == teacher.CourseId);
+
+        if (course != null)
+        {
+            teacherDb.Add(teacher.TeachLevel, course);
+        }
+        
+        
+        _teacherRepository.AddEntity(teacherDb);
+
+        if (_teacherRepository.SaveChanges())
+        {
+            return Ok();
+        }
+        throw new Exception("Failed to add teacher");
     }
 
     [HttpPut("UpdateTeacher")]
     public IActionResult UpdateTeacher(TeacherToEditDto teacher)
     {
-        Teacher? teacherDb = _entityFramework.Teachers
-            .Where(t => t.TeacherId == teacher.TeacherId)
-            .FirstOrDefault<Teacher>();
+        TeacherToEditValidator toEditValidator = new TeacherToEditValidator();
+        ValidationResult result = toEditValidator.Validate(teacher);
+        if (!result.IsValid)
+        {
+            foreach(var failure in result.Errors)
+            {
+                Console.WriteLine("Property " + failure.PropertyName + " failed validation. Error was: " + failure.ErrorMessage);
+            }
+            return BadRequest();
+        }
+
+        Teacher? teacherDb = _teacherRepository.GetSingleTeacher(teacher.Id);
         if (teacherDb != null)
         {
-            teacherDb.TeachLevel = teacher.TeachLevel;
-            if (_entityFramework.SaveChanges() > 0)
+            Course? course = _context.Courses.FirstOrDefault(course => course.Id == teacher.CourseId);
+
+            if (course != null)
+            {
+                teacherDb.Add(teacher.TeachLevel, course);
+            }
+            if (_teacherRepository.SaveChanges())
             {
                 return Ok();
             }
@@ -82,14 +115,11 @@ public class TeacherController(IConfiguration config): ControllerBase
     [HttpDelete("DeleteTeacher/{teacherId}")]
     public IActionResult DeleteTeacher(int teacherId)
     {
-        Teacher? teacherDb = _entityFramework.Teachers
-            .Where(teacher => teacher.TeacherId == teacherId)
-            .FirstOrDefault<Teacher>();
-
+        Teacher? teacherDb = _teacherRepository.GetSingleTeacher(teacherId);
         if (teacherDb != null)
         {
-            _entityFramework.Teachers.Remove(teacherDb);
-            if (_entityFramework.SaveChanges() > 0)
+            _teacherRepository.RemoveEntity(teacherDb);
+            if (_teacherRepository.SaveChanges())
             {
                 return Ok();
             }

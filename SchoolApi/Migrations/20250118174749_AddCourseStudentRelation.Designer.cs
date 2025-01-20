@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using SchoolApi.Data;
@@ -11,9 +12,11 @@ using SchoolApi.Data;
 namespace SchoolApi.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20250118174749_AddCourseStudentRelation")]
+    partial class AddCourseStudentRelation
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -24,11 +27,11 @@ namespace SchoolApi.Migrations
 
             modelBuilder.Entity("SchoolApi.Models.Course", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("CourseId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("CourseId"));
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -38,7 +41,7 @@ namespace SchoolApi.Migrations
                     b.Property<int>("TeacherId")
                         .HasColumnType("integer");
 
-                    b.HasKey("Id");
+                    b.HasKey("CourseId");
 
                     b.HasIndex("TeacherId")
                         .IsUnique();
@@ -58,7 +61,7 @@ namespace SchoolApi.Migrations
 
                     b.HasIndex("CourseId");
 
-                    b.ToTable("CourseStudentRelations");
+                    b.ToTable("CourseStudentRelation");
                 });
 
             modelBuilder.Entity("SchoolApi.Models.Users.Human", b =>
@@ -120,16 +123,16 @@ namespace SchoolApi.Migrations
 
             modelBuilder.Entity("SchoolApi.Models.Users.Teacher", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("TeacherId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("TeacherId"));
 
                     b.Property<int>("TeachLevel")
                         .HasColumnType("integer");
 
-                    b.HasKey("Id");
+                    b.HasKey("TeacherId");
 
                     b.ToTable("Teachers", (string)null);
                 });

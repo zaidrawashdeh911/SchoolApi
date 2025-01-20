@@ -1,16 +1,20 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.Text.Json.Serialization;
-using SchoolApi.Data;
+﻿using SchoolApi.Data;
 
 namespace SchoolApi.Models.Users;
 
 public class Teacher
 {
-    public int TeacherId{init;get;}
-    [JsonConverter(typeof(JsonStringEnumConverter))]
-    public Level TeachLevel { set; get; }
-    public Course? Course { set; get; }
+    public int Id{init;get;}
+
+    public Level TeachLevel { private set; get; }
+    public Course? Course { private set; get; }
     // [MaxLength(50)]
     // public string CourseName { set; get; } = "";
     // public int CourseId { set; get; }
+    
+    public void Add(Level level, Course course)
+    {
+        TeachLevel = level;
+        Course = course;
+    }
 }

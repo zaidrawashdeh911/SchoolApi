@@ -1,11 +1,10 @@
 using SchoolApi.Data;
-using SchoolApi.Models;
 
-namespace SchoolApi.Dtos;
+namespace SchoolApi.Dtos.TeacherDtos;
 
 public class TeacherToAddDto
 {
-    public Level TeacherLevel { set; get; }
+    public Level TeachLevel { set; get; }
     public int CourseId { set; get; }
     // public string CourseName { set; get; } = "";
     // public int CourseId { set; get; }

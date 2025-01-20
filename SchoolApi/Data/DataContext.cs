@@ -11,7 +11,7 @@ public class DataContext(IConfiguration config) : DbContext
     public DbSet<Teacher> Teachers { get; set; }
     public DbSet<Student> Students { get; set; }
     public DbSet<Course> Courses { get; set; }
-    //public DbSet<CourseStudentRelation> CourseStudentRelations { get; set; }
+    public DbSet<CourseStudentRelation> CourseStudentRelations { get; set; }
    // public DbSet<Order> Orders { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -40,14 +40,10 @@ public class DataContext(IConfiguration config) : DbContext
 
         modelBuilder.Entity<Teacher>()
             .ToTable("Teachers")
-            .HasKey(teacher => teacher.TeacherId);
+            .HasKey(teacher => teacher.Id);
         modelBuilder.Entity<Teacher>()
-            .Property(teacher => teacher.TeacherId)
+            .Property(teacher => teacher.Id)
             .ValueGeneratedOnAdd();
-        modelBuilder.Entity<Teacher>()
-            .HasOne(teacher=> teacher.Course)
-            .WithOne(course => course.Teacher)
-            .HasForeignKey<Course>(course => course.TeacherId);
         
         modelBuilder.Entity<Student>()
             .ToTable("Students")
@@ -58,44 +54,44 @@ public class DataContext(IConfiguration config) : DbContext
         
         modelBuilder.Entity<Course>()
             .ToTable("Courses")
-            .HasKey(course => course.CourseId);
+            .HasKey(course => course.Id);
         modelBuilder.Entity<Course>()
-            .Property(course => course.CourseId)
+            .Property(course => course.Id)
             .ValueGeneratedOnAdd();
         modelBuilder.Entity<Course>()
             .HasOne(course => course.Teacher)
             .WithOne(teacher => teacher.Course)
             .HasForeignKey<Course>(course => course.TeacherId);
         
-        /*
-            this is another way to configure the entity model (model building)
-            modelBuilder.Entity<Course>(entity =>
-            {
-                entity.ToTable("Courses");
+         /*
+             this is another way to configure the entity model (model building)
+             modelBuilder.Entity<Course>(entity =>
+             {
+                 entity.ToTable("Courses");
 
-                entity.HasKey(course => course.CourseId);
+                 entity.HasKey(course => course.CourseId);
 
-                entity.Property(course => course.CourseId)
-                      .ValueGeneratedOnAdd();
+                 entity.Property(course => course.CourseId)
+                       .ValueGeneratedOnAdd();
 
-                entity.HasOne(course => course.Teacher)
-                      .WithOne(teacher => teacher.Course)
-                      .HasForeignKey<Course>(course => course.TeacherId);
-            });
-         */
-        
-        // modelBuilder.Entity<CourseStudentRelation>()
-        //     .HasKey(studentCourse => new { studentCourse.StudentId, studentCourse.CourseId });
-        //
-        // modelBuilder.Entity<CourseStudentRelation>()
-        //     .HasOne(studentCourse => studentCourse.Student)
-        //     .WithMany(student => student.CourseStudentRelations)
-        //     .HasForeignKey(studentCourse => studentCourse.StudentId);
-        //
-        // modelBuilder.Entity<CourseStudentRelation>()
-        //     .HasOne(studentCourse => studentCourse.Course)
-        //     .WithMany(course => course.CourseStudentRelations)
-        //     .HasForeignKey(studentCourse => studentCourse.CourseId);
+                 entity.HasOne(course => course.Teacher)
+                       .WithOne(teacher => teacher.Course)
+                       .HasForeignKey<Course>(course => course.TeacherId);
+             });
+          */
+         
+         modelBuilder.Entity<CourseStudentRelation>()
+             .HasKey(studentCourse => new { studentCourse.StudentId, studentCourse.CourseId });
+         
+         modelBuilder.Entity<CourseStudentRelation>()
+             .HasOne(studentCourse => studentCourse.Student)
+             .WithMany(student => student.CourseStudentRelations)
+             .HasForeignKey(studentCourse => studentCourse.StudentId);
+         
+         modelBuilder.Entity<CourseStudentRelation>()
+             .HasOne(studentCourse => studentCourse.Course)
+             .WithMany(course => course.CourseStudentRelations)
+             .HasForeignKey(studentCourse => studentCourse.CourseId);
 
         // modelBuilder.Entity<Order>()
         //     .ToTable("Orders")
