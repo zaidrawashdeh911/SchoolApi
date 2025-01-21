@@ -27,11 +27,10 @@ public class TeacherController: ControllerBase
         _mapper = new Mapper(new MapperConfiguration(configure =>
         {
             configure.CreateMap<Teacher,TeacherToReturnDto>();
-            configure.CreateMap<TeacherToAddDto,Teacher>();
         }));
     }
     
-    [HttpGet("GetAllTeachers")]
+    [HttpGet("GetTeachers")]
     public IEnumerable<TeacherToReturnDto> GetTeachers()
     {
         IEnumerable<TeacherToReturnDto> returnTeachers = _mapper.Map<IEnumerable<TeacherToReturnDto>>(_teacherRepository.GetTeachers());
@@ -48,10 +47,10 @@ public class TeacherController: ControllerBase
     }
 
     [HttpPost("AddTeacher")]
-    public IActionResult AddTeacher(TeacherToAddDto teacher)
+    public IActionResult AddTeacher(TeacherToAddDto teacherToAdd)
     {
         TeacherToAddValidator toAddValidator = new TeacherToAddValidator();
-        ValidationResult result = toAddValidator.Validate(teacher);
+        ValidationResult result = toAddValidator.Validate(teacherToAdd);
         if (!result.IsValid)
         {
             foreach(var failure in result.Errors)
@@ -63,15 +62,15 @@ public class TeacherController: ControllerBase
         
         Teacher teacherDb = new Teacher();
         
-        Course? course = _context.Courses.FirstOrDefault(c => c.Id == teacher.CourseId);
+        Course? course = _context.Courses.FirstOrDefault(c => c.Id == teacherToAdd.CourseId);
 
         if (course != null)
         {
-            teacherDb.Add(teacher.TeachLevel, course);
+            teacherDb.Add(teacherToAdd.TeachLevel, course);
         }
         
         
-        _teacherRepository.AddEntity(teacherDb);
+        _teacherRepository.AddTeacher(teacherDb);
 
         if (_teacherRepository.SaveChanges())
         {
@@ -118,7 +117,7 @@ public class TeacherController: ControllerBase
         Teacher? teacherDb = _teacherRepository.GetSingleTeacher(teacherId);
         if (teacherDb != null)
         {
-            _teacherRepository.RemoveEntity(teacherDb);
+            _teacherRepository.RemoveTeacher(teacherDb);
             if (_teacherRepository.SaveChanges())
             {
                 return Ok();

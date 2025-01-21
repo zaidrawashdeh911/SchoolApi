@@ -7,11 +7,11 @@ namespace SchoolApi.Data;
 
 public class DataContext(IConfiguration config) : DbContext
 {
-    public DbSet<Human> Humans { get; set; }
+    //public DbSet<Human> Humans { get; set; }
     public DbSet<Teacher> Teachers { get; set; }
-    public DbSet<Student> Students { get; set; }
+    //public DbSet<Student> Students { get; set; }
     public DbSet<Course> Courses { get; set; }
-    public DbSet<CourseStudentRelation> CourseStudentRelations { get; set; }
+    //public DbSet<CourseStudentRelation> CourseStudentRelations { get; set; }
    // public DbSet<Order> Orders { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -31,12 +31,12 @@ public class DataContext(IConfiguration config) : DbContext
         // dotnet ef migrations add DbCreation
         // dotnet ef database update
 
-        modelBuilder.Entity<Human>()
-            .ToTable("Humans")
-            .HasKey(human => human.HumanId);
-        modelBuilder.Entity<Human>()
-            .Property(human => human.HumanId)
-            .ValueGeneratedOnAdd();
+        // modelBuilder.Entity<Human>()
+        //     .ToTable("Humans")
+        //     .HasKey(human => human.HumanId);
+        // modelBuilder.Entity<Human>()
+        //     .Property(human => human.HumanId)
+        //     .ValueGeneratedOnAdd();
 
         modelBuilder.Entity<Teacher>()
             .ToTable("Teachers")
@@ -45,12 +45,12 @@ public class DataContext(IConfiguration config) : DbContext
             .Property(teacher => teacher.Id)
             .ValueGeneratedOnAdd();
         
-        modelBuilder.Entity<Student>()
-            .ToTable("Students")
-            .HasKey(student => student.StudentId);
-        modelBuilder.Entity<Student>()
-            .Property(student => student.StudentId)
-            .ValueGeneratedOnAdd();
+        // modelBuilder.Entity<Student>()
+        //     .ToTable("Students")
+        //     .HasKey(student => student.StudentId);
+        // modelBuilder.Entity<Student>()
+        //     .Property(student => student.StudentId)
+        //     .ValueGeneratedOnAdd();
         
         modelBuilder.Entity<Course>()
             .ToTable("Courses")
@@ -80,18 +80,18 @@ public class DataContext(IConfiguration config) : DbContext
              });
           */
          
-         modelBuilder.Entity<CourseStudentRelation>()
-             .HasKey(studentCourse => new { studentCourse.StudentId, studentCourse.CourseId });
-         
-         modelBuilder.Entity<CourseStudentRelation>()
-             .HasOne(studentCourse => studentCourse.Student)
-             .WithMany(student => student.CourseStudentRelations)
-             .HasForeignKey(studentCourse => studentCourse.StudentId);
-         
-         modelBuilder.Entity<CourseStudentRelation>()
-             .HasOne(studentCourse => studentCourse.Course)
-             .WithMany(course => course.CourseStudentRelations)
-             .HasForeignKey(studentCourse => studentCourse.CourseId);
+         // modelBuilder.Entity<CourseStudentRelation>()
+         //     .HasKey(studentCourse => new { studentCourse.StudentId, studentCourse.CourseId });
+         //
+         // modelBuilder.Entity<CourseStudentRelation>()
+         //     .HasOne(studentCourse => studentCourse.Student)
+         //     .WithMany(student => student.CourseStudentRelations)
+         //     .HasForeignKey(studentCourse => studentCourse.StudentId);
+         //
+         // modelBuilder.Entity<CourseStudentRelation>()
+         //     .HasOne(studentCourse => studentCourse.Course)
+         //     .WithMany(course => course.CourseStudentRelations)
+         //     .HasForeignKey(studentCourse => studentCourse.CourseId);
 
         // modelBuilder.Entity<Order>()
         //     .ToTable("Orders")

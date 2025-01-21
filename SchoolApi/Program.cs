@@ -26,6 +26,7 @@ builder.Services.AddCors((options) =>
     });
 });
 builder.Services.AddScoped<ITeacherRepository, TeacherRepository>();
+builder.Services.AddScoped<ICourseRepository, CourseRepository>();
 
 var app = builder.Build();
 

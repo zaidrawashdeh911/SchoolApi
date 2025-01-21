@@ -5,40 +5,40 @@ namespace SchoolApi.Repositories;
 
 public class TeacherRepository(IConfiguration configuration):ITeacherRepository
 {
-    private readonly DataContext _entityFramework = new (configuration);
+    private readonly DataContext _context = new (configuration);
 
     public bool SaveChanges()
     {
-        return _entityFramework.SaveChanges() > 0;
+        return _context.SaveChanges() > 0;
     }
 
-    public void AddEntity<T>(T entityToAdd)
+    public void AddTeacher(Teacher? teacher)
     {
-        if (entityToAdd != null)
+        if (teacher != null)
         {
-            _entityFramework.Add(entityToAdd);
+            _context.Add(teacher);
         }
         throw new Exception("Can't add null entity");
     }
 
-    public void RemoveEntity<T>(T entityToRemove)
+    public void RemoveTeacher(Teacher? teacher)
     {
-        if (entityToRemove != null)
+        if (teacher != null)
         {
-            _entityFramework.Remove(entityToRemove);
+            _context.Remove(teacher);
         }
         throw new Exception("Can't remove null entity");
     }
 
     public IEnumerable<Teacher> GetTeachers()
     {
-        IEnumerable<Teacher> teachers = _entityFramework.Teachers.ToList();
+        IEnumerable<Teacher> teachers = _context.Teachers.ToList();
         return teachers;
     }
 
     public Teacher GetSingleTeacher(int teacherId)
     {
-        Teacher? teacherDb = _entityFramework.Teachers.FirstOrDefault(teacher => teacher.Id == teacherId);
+        Teacher? teacherDb = _context.Teachers.FirstOrDefault(teacher => teacher.Id == teacherId);
 
         if (teacherDb != null)
         {
