@@ -9,7 +9,7 @@ public class DataContext(IConfiguration config) : DbContext
 {
     //public DbSet<Human> Humans { get; set; }
     public DbSet<Teacher> Teachers { get; set; }
-    //public DbSet<Student> Students { get; set; }
+    public DbSet<Student> Students { get; set; }
     public DbSet<Course> Courses { get; set; }
     //public DbSet<CourseStudentRelation> CourseStudentRelations { get; set; }
    // public DbSet<Order> Orders { get; set; }
@@ -45,12 +45,12 @@ public class DataContext(IConfiguration config) : DbContext
             .Property(teacher => teacher.Id)
             .ValueGeneratedOnAdd();
         
-        // modelBuilder.Entity<Student>()
-        //     .ToTable("Students")
-        //     .HasKey(student => student.StudentId);
-        // modelBuilder.Entity<Student>()
-        //     .Property(student => student.StudentId)
-        //     .ValueGeneratedOnAdd();
+        modelBuilder.Entity<Student>()
+            .ToTable("Students")
+            .HasKey(student => student.Id);
+        modelBuilder.Entity<Student>()
+            .Property(student => student.Id)
+            .ValueGeneratedOnAdd();
         
         modelBuilder.Entity<Course>()
             .ToTable("Courses")

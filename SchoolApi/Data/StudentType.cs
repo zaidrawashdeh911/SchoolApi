@@ -2,6 +2,6 @@
 
 public enum StudentType
 {
-    NationalStudent,
+    NationalStudent=1,
     InternationalStudent,
 }

@@ -1,7 +1,7 @@
 ﻿using SchoolApi.Data;
 using SchoolApi.Models.Users;
 
-namespace SchoolApi.Repositories;
+namespace SchoolApi.Repositories.TeacherRepository;
 
 public class TeacherRepository(IConfiguration configuration):ITeacherRepository
 {
@@ -16,18 +16,25 @@ public class TeacherRepository(IConfiguration configuration):ITeacherRepository
     {
         if (teacher != null)
         {
-            _context.Add(teacher);
+            _context.Teachers.Add(teacher);
         }
-        throw new Exception("Can't add null entity");
+        else
+        {
+            throw new Exception("Can't add null entity");
+        }
+
     }
 
     public void RemoveTeacher(Teacher? teacher)
     {
         if (teacher != null)
         {
-            _context.Remove(teacher);
+            _context.Teachers.Remove(teacher);
         }
-        throw new Exception("Can't remove null entity");
+        else
+        {
+            throw new Exception("Can't remove null entity");
+        }
     }
 
     public IEnumerable<Teacher> GetTeachers()

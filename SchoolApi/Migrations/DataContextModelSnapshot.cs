@@ -45,6 +45,25 @@ namespace SchoolApi.Migrations
                     b.ToTable("Courses", (string)null);
                 });
 
+            modelBuilder.Entity("SchoolApi.Models.Users.Student", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("Level")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("StudentType")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Students", (string)null);
+                });
+
             modelBuilder.Entity("SchoolApi.Models.Users.Teacher", b =>
                 {
                     b.Property<int>("Id")

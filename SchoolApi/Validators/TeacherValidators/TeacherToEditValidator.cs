@@ -9,5 +9,6 @@ public class TeacherToEditValidator: AbstractValidator<TeacherToEditDto>
     {
         RuleFor(id => id.Id).NotEmpty();
         RuleFor(level => level.TeachLevel).NotEmpty();
+        RuleFor(course => course.CourseId).NotEmpty();
     }
 }

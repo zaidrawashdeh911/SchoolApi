@@ -1,6 +1,6 @@
 ﻿using SchoolApi.Models;
 
-namespace SchoolApi.Repositories;
+namespace SchoolApi.Repositories.CourseRepository;
 
 public interface ICourseRepository
 {

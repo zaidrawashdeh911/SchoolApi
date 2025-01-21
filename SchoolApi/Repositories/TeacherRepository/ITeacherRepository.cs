@@ -1,6 +1,6 @@
 ﻿using SchoolApi.Models.Users;
 
-namespace SchoolApi.Repositories;
+namespace SchoolApi.Repositories.TeacherRepository;
 
 public interface ITeacherRepository
 {

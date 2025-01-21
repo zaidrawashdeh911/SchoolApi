@@ -5,7 +5,7 @@ using SchoolApi.Data;
 using SchoolApi.Dtos.TeacherDtos;
 using SchoolApi.Models;
 using SchoolApi.Models.Users;
-using SchoolApi.Repositories;
+using SchoolApi.Repositories.TeacherRepository;
 using SchoolApi.Validators.TeacherValidators;
 
 namespace SchoolApi.Controllers;
@@ -114,16 +114,13 @@ public class TeacherController: ControllerBase
     [HttpDelete("DeleteTeacher/{teacherId}")]
     public IActionResult DeleteTeacher(int teacherId)
     {
-        Teacher? teacherDb = _teacherRepository.GetSingleTeacher(teacherId);
-        if (teacherDb != null)
+        Teacher teacherDb = _teacherRepository.GetSingleTeacher(teacherId);
+
+        _teacherRepository.RemoveTeacher(teacherDb);
+        if (_teacherRepository.SaveChanges())
         {
-            _teacherRepository.RemoveTeacher(teacherDb);
-            if (_teacherRepository.SaveChanges())
-            {
-                return Ok();
-            }
-            throw new Exception("Failed to delete teacher");
+            return Ok();
         }
-        throw new Exception("Cannot delete null teacher");
+        throw new Exception("Failed to delete teacher");
     }
 }

@@ -1,11 +1,9 @@
 using AutoMapper;
 using FluentValidation.Results;
 using Microsoft.AspNetCore.Mvc;
-using SchoolApi.Data;
 using SchoolApi.Dtos.CourseDtos;
 using SchoolApi.Models;
-using SchoolApi.Models.Users;
-using SchoolApi.Repositories;
+using SchoolApi.Repositories.CourseRepository;
 using SchoolApi.Validators.CourseValidators;
 
 namespace SchoolApi.Controllers;
@@ -14,14 +12,12 @@ namespace SchoolApi.Controllers;
 [Route("[controller]")]
 public class CourseController:ControllerBase
 {
-    private readonly DataContext _context;
     private readonly ICourseRepository _courseRepository;
     private readonly IMapper _mapper;
 
-    public CourseController(IConfiguration config, ICourseRepository courseRepository)
+    public CourseController(ICourseRepository courseRepository)
     {
         _courseRepository = courseRepository;
-        _context = new DataContext(config);
         _mapper = new Mapper(new MapperConfiguration(configure =>
         {
             configure.CreateMap<CourseToAddDto, Course>();

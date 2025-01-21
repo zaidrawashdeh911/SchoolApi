@@ -1,4 +1,7 @@
-using SchoolApi.Repositories;
+// using SchoolApi.Repositories;
+using SchoolApi.Repositories.CourseRepository;
+using SchoolApi.Repositories.StudentRepository;
+using SchoolApi.Repositories.TeacherRepository;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,6 +30,7 @@ builder.Services.AddCors((options) =>
 });
 builder.Services.AddScoped<ITeacherRepository, TeacherRepository>();
 builder.Services.AddScoped<ICourseRepository, CourseRepository>();
+builder.Services.AddScoped<IStudentRepository, StudentRepository>();
 
 var app = builder.Build();
 

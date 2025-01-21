@@ -2,7 +2,7 @@
 using SchoolApi.Dtos.CourseDtos;
 using SchoolApi.Models;
 
-namespace SchoolApi.Repositories;
+namespace SchoolApi.Repositories.CourseRepository;
 
 public class CourseRepository(IConfiguration config) : ICourseRepository
 {
